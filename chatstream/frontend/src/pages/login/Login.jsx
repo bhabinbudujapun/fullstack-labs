@@ -1,6 +1,29 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { login } from "../../http/authApi";
+import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: (response) => {
+      console.log("Login successful:", response);
+    },
+  });
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    const credentials = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    };
+    console.log("Submitting login:", credentials);
+    mutation.mutate(credentials);
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +39,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -28,6 +51,7 @@ const Login = () => {
                   id="email"
                   name="email"
                   type="email"
+                  ref={emailRef}
                   required
                   autoComplete="email"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -55,6 +79,7 @@ const Login = () => {
                   id="password"
                   name="password"
                   type="password"
+                  ref={passwordRef}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -65,6 +90,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
+                onClick={handleLoginSubmit}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Login
               </button>

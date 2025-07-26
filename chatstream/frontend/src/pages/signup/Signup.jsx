@@ -1,6 +1,33 @@
 import { Link } from "react-router-dom";
+import { useRef } from "react";
+import { singup } from "../../http/authApi";
+import { useMutation } from "@tanstack/react-query";
 
 const Signup = () => {
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const confirmPasswordRef = useRef();
+
+  const mutation = useMutation({
+    mutationFn: singup,
+    onSuccess: (response) => {
+      console.log("Signup successful:", response);
+    },
+  });
+
+  const handleSignupSubmit = (e) => {
+    e.preventDefault();
+    const credentials = {
+      username: nameRef.current.value,
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+      confirmPassword: confirmPasswordRef.current.value,
+    };
+    console.log("Submitting signup:", credentials);
+    mutation.mutate(credentials);
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -16,7 +43,7 @@ const Signup = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form className="space-y-6">
             <div>
               <label
                 htmlFor="name"
@@ -28,6 +55,7 @@ const Signup = () => {
                   id="name"
                   name="name"
                   type="name"
+                  ref={nameRef}
                   required
                   autoComplete="name"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -45,6 +73,7 @@ const Signup = () => {
                   id="email"
                   name="email"
                   type="email"
+                  ref={emailRef}
                   required
                   autoComplete="email"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -65,6 +94,28 @@ const Signup = () => {
                   id="password"
                   name="password"
                   type="password"
+                  ref={passwordRef}
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm/6 font-medium text-gray-900">
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="confirmPassword"
+                  name="password"
+                  type="password"
+                  ref={confirmPasswordRef}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -75,6 +126,7 @@ const Signup = () => {
             <div>
               <button
                 type="submit"
+                onClick={handleSignupSubmit}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Sign in
               </button>
