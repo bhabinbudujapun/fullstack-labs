@@ -5,6 +5,7 @@ import Signup from "./pages/signup/Signup";
 import AuthLayout from "./layout/AuthLayout";
 import NotFound from "./pages/notfound/NotFound";
 import { createBrowserRouter } from "react-router-dom";
+import ProtectedRoute from "./components/proute/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -24,8 +25,12 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: 'chat',
-        element: <Chat />
+        path: "chat",
+        element: (
+          <ProtectedRoute>
+            <Chat />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "*",
