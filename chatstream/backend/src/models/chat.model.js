@@ -10,16 +10,31 @@ const chatSchema = new mongoose.Schema(
       },
     ],
 
-    messages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Message",
+    isGroup: {
+      type: Boolean,
+      default: false,
+    },
+
+    name: {
+      type: String,
+      required: function () {
+        return this.isGroup;
       },
-    ],
+    },
 
     lastMessage: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message",
+    },
+
+    unreadCount: {
+      type: Number,
+      default: 0,
+    },
+
+    avatar: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }

@@ -5,18 +5,24 @@ import {
   getUserChats,
   getMessagesByChatId,
   sendMessageToChat,
+  updateChat,
+  markMessagesAsRead,
 } from "../controllers/chat.controller.js";
 
 const router = express.Router();
 
 router.use(checkAccessToken);
 
-router.post("/", createOrFetchChat);
+router.post("/", createOrFetchChat); // Create/fetch chat
 
-router.get("/", getUserChats);
+router.get("/", getUserChats); // Get user's chats
 
-router.get("/:chatId/messages", getMessagesByChatId);
+router.patch("/:chatId", updateChat); // Update chat metadata
 
-router.post("/:chatId/messages", sendMessageToChat);
+router.get("/:chatId/messages", getMessagesByChatId); // Fetch messages
+
+router.post("/:chatId/messages", sendMessageToChat); // Send message
+
+router.patch("/:chatId/messages/:messageId/read", markMessagesAsRead); // Mark message as read
 
 export default router;
